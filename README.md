@@ -1,31 +1,22 @@
 # OpenWebRx-Installer
 
-<img src="https://img.shields.io/github/stars/hmol33/OpenWebRx-Installer?style=flat-square&color=blue" alt="Stars">
-<img src="https://img.shields.io/github/forks/hmol33/OpenWebRx-Installer?style=flat-square&color=green" alt="Forks">
-<img src="https://img.shields.io/github/license/hmol33/OpenWebRx-Installer?style=flat-square" alt="License">
+OpenWebRx installer - Creating a Web SDR with OpenWebRX and a 7-20$ SDR Dongle
 
-Creating a Web SDR with OpenWebRX and a 7-20$ SDR Dongle.
-
-## Installatie
+## Installation
 
 ```bash
-bash <(curl -Ls https://raw.githubusercontent.com/hmol33/OpenWebRx-Installer/master/OpenWebRx-Installer.sh)
+git clone https://github.com/hmol33/OpenWebRx-Installer.git
+cd OpenWebRx-Installer
 ```
 
-## Gebruik
+## Usage
 
-```bash
-# Voer het installatiescript uit
-bash <(curl -Ls https://raw.githubusercontent.com/hmol33/OpenWebRx-Installer/master/OpenWebRx-Installer.sh)
+See the documentation for more information.
 
-# Volg de instructies op het scherm
-# Na installatie: open http://localhost:8073 in je browser
-```
+## Contributing
 
-## Bijdragers
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-- [hmol33](https://github.com/hmol33) — Onderhouder
+## License
 
-## Licentie
-
-MIT — zie [LICENSE](LICENSE) voor details.
+See [LICENSE](LICENSE) for details.

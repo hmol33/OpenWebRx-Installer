@@ -1,0 +1,21 @@
+# Add 'documentation' label to any change to .md files
+documentation:
+  - changed-files:
+      - any-glob-to-any-file: '**/*.md'
+
+# Add 'bug' label to any change to source files
+bug:
+  - changed-files:
+      - any-glob-to-any-file: 'src/**'
+      - any-glob-to-any-file: 'lib/**'
+
+# Add 'enhancement' label to any change to source files
+enhancement:
+  - changed-files:
+      - any-glob-to-any-file: 'src/**'
+      - any-glob-to-any-file: 'lib/**'
+
+# Add 'ci' label to any change to workflow files
+ci:
+  - changed-files:
+      - any-glob-to-any-file: '.github/workflows/**'
