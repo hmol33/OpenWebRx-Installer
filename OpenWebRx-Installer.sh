@@ -1,37 +1,56 @@
-#Install dependencies
-sudo apt-get install build-essential git libfftw3-dev cmake libusb-1.0-0-dev nmap
-#nmap itself is not used by OpenWebRX at all, but we need to install it because the ncat tool is packaged with it.
-#ncat is a netcat alternative which is used by OpenWebRX for internally distributing I/Q data,
-# and also solves the incompatibility problems among netcat versions.
+#!/bin/bash
+set -euo pipefail
 
-#Fetch and build rtl-sdr, skip if already done (subdirectories will be created under the current directory).
-git clone git://git.osmocom.org/rtl-sdr.git
-cd rtl-sdr/
-mkdir build
+# OpenWebRx-Installer: installeert OpenWebRX met RTL-SDR ondersteuning
+# Gebruik: bash OpenWebRx-Installer.sh
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
+# Install dependencies
+sudo apt-get update
+sudo apt-get install -y build-essential git libfftw3-dev cmake libusb-1.0-0-dev nmap
+# nmap is nodig voor ncat (netcat alternatief gebruikt door OpenWebRX)
+
+# Fetch and build rtl-sdr
+if [ ! -d rtl-sdr ]; then
+  git clone https://git.osmocom.org/rtl-sdr.git
+fi
+cd rtl-sdr
+mkdir -p build
 cd build
 cmake ../ -DINSTALL_UDEV_RULES=ON
-make
+make -j$(nproc)
 sudo make install
 sudo ldconfig
 cd ../..
 
-#Disable the DVB-T driver, which would prevent the rtl_sdr tool from accessing the stick
-#(if you want to use it for DVB-T reception later, you should undo this change):
+# Disable DVB-T driver (voorkomt conflicten met RTL-SDR)
 sudo bash -c 'echo -e "\n# for RTL-SDR:\nblacklist dvb_usb_rtl28xxu\n" >> /etc/modprobe.d/blacklist.conf'
-sudo rmmod dvb_usb_rtl28xxu # disable that kernel module for the current session
+sudo rmmod dvb_usb_rtl28xxu 2>/dev/null || true
 
-#Download OpenWebRX and libcsdr (subdirectories will be created under the current directory).
-git clone https://github.com/simonyiszk/openwebrx.git
-git clone https://github.com/simonyiszk/csdr.git
+# Download OpenWebRX and libcsdr
+if [ ! -d openwebrx ]; then
+  git clone https://github.com/simonyiszk/openwebrx.git
+fi
+if [ ! -d csdr ]; then
+  git clone https://github.com/simonyiszk/csdr.git
+fi
 
-#Compile libcsdr (which is a dependency of OpenWebRX)
+# Compile libcsdr
 cd csdr
-make
+make -j$(nproc)
 sudo make install
+sudo ldconfig
+cd ..
 
-#Edit OpenWebRX config or leave defaults
-nano ../openwebrx/config_webrx.py
+# Edit OpenWebRX config (optioneel)
+if command -v nano >/dev/null 2>&1; then
+  nano openwebrx/config_webrx.py
+fi
 
-#Run OpenWebRX
-cd ../openwebrx
+# Start OpenWebRX
+cd openwebrx
+echo "OpenWebRX wordt gestart. Open http://localhost:8073 in je browser."
+echo "Ctrl+C om te stoppen."
 ./openwebrx.py
