@@ -13,7 +13,8 @@ INSTALL_DIR="${INSTALL_DIR:-$HOME/openwebrx-install}"
 log() {
     local level="$1"
     shift
-    local msg="[$(date '+%Y-%m-%d %H:%M:%S')] [$level] $*"
+    local msg
+    msg="[$(date '+%Y-%m-%d %H:%M:%S')] [$level] $*"
     echo "$msg"
     echo "$msg" >> "$LOG_FILE" 2>/dev/null || true
 }
