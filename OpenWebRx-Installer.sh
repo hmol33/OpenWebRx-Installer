@@ -1,3 +1,4 @@
+#!/bin/bash
 #Install dependencies
 sudo apt-get install build-essential git libfftw3-dev cmake libusb-1.0-0-dev nmap
 #nmap itself is not used by OpenWebRX at all, but we need to install it because the ncat tool is packaged with it.
@@ -6,14 +7,14 @@ sudo apt-get install build-essential git libfftw3-dev cmake libusb-1.0-0-dev nma
 
 #Fetch and build rtl-sdr, skip if already done (subdirectories will be created under the current directory).
 git clone git://git.osmocom.org/rtl-sdr.git
-cd rtl-sdr/
+cd rtl-sdr/ || exit
 mkdir build
-cd build
+cd build || exit
 cmake ../ -DINSTALL_UDEV_RULES=ON
 make
 sudo make install
 sudo ldconfig
-cd ../..
+cd ../.. || exit
 
 #Disable the DVB-T driver, which would prevent the rtl_sdr tool from accessing the stick
 #(if you want to use it for DVB-T reception later, you should undo this change):
@@ -25,7 +26,7 @@ git clone https://github.com/simonyiszk/openwebrx.git
 git clone https://github.com/simonyiszk/csdr.git
 
 #Compile libcsdr (which is a dependency of OpenWebRX)
-cd csdr
+cd csdr || exit
 make
 sudo make install
 
@@ -33,5 +34,6 @@ sudo make install
 nano ../openwebrx/config_webrx.py
 
 #Run OpenWebRX
-cd ../openwebrx
+cd ../openwebrx || exit
 ./openwebrx.py
+
